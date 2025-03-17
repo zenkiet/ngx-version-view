@@ -1,0 +1,89 @@
+{
+  "branches": ["main"],
+  "plugins": [
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "angular",
+        "parserOpts": {
+          "headerPattern": "^(\\w*)\\((.*?)\\):\\s*(.*)$",
+          "headerCorrespondence": ["type", "scope", "subject"],
+          "noteKeywords": ["BREAKING CHANGE", "BREAKING CHANGES", "BREAKING"]
+        },
+        "releaseRules": [
+          { "type": "feat", "release": "minor" },
+          { "type": "fix", "release": "patch" },
+          { "type": "perf", "release": "patch" },
+          { "type": "init", "release": "minor" },
+          { "type": "docs", "release": "patch" },
+          { "type": "refactor", "release": "patch" },
+          { "type": "style", "release": "patch" },
+          { "type": "build", "release": "patch" }
+        ],
+        "writerOpts": {
+          "commitsSort": ["subject", "scope"]
+        },
+        "presetConfig": {
+          "types": [
+            { "type": "feat", "section": "✨ Features" },
+            { "type": "fix", "section": "🐛 Bug Fixes" },
+            { "type": "perf", "section": "⚡️ Performance Improvements" },
+            { "type": "revert", "section": "↩️ Reverts" },
+            { "type": "docs", "section": "📝 Documentation" },
+            { "type": "style", "section": "💄 Styles" },
+            { "type": "refactor", "section": "♻️ Code Refactoring" },
+            { "type": "test", "section": "✅ Tests" },
+            { "type": "build", "section": "👷 Build System" },
+            { "type": "ci", "section": "🔧 Continuous Integration" },
+            { "type": "init", "section": "🎉 Initial Release" }
+          ]
+        }
+      }
+    ],
+    "@semantic-release/release-notes-generator",
+    [
+      "@semantic-release/changelog",
+      {
+        "changelogFile": "docs/CHANGELOG.md",
+        "changelogTitle": "# Changelog\n\nAll the important changes of the project will be recorded here."
+      }
+    ],
+    [
+      "@semantic-release/npm",
+      {
+        "npmPublish": true,
+        "pkgRoot": "dist/ngx-version-view",
+        "tarballDir": "dist"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "package.json",
+          "docs/CHANGELOG.md",
+          "README.md",
+          "projects/ngx-version-view/package.json"
+        ],
+        "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": [
+          {
+            "path": "dist/*.tgz",
+            "label": "NPM tarball"
+          },
+          {
+            "path": "dist/ngx-version-view/**/*",
+            "label": "Distribution files"
+          }
+        ],
+        "successComment": "🎉 This ${issue.pull_request ? 'PR is included' : 'issue has been resolved'} in version ${nextRelease.version}",
+        "failComment": "❌ The release failed with the following error: ${error.message}"
+      }
+    ]
+  ]
+}
