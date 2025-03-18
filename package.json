@@ -34,7 +34,11 @@
     }
   },
   "files": [
-    "dist/ngx-version-view/**/*"
+    "dist/ngx-version-view/**/*",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md"
   ],
   "scripts": {
     "build": "ng build ngx-version-view",
