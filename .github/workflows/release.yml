@@ -39,6 +39,12 @@ jobs:
       - name: Build library
         run: npm run build
 
+      - name: Copy files to dist
+        run: |
+          cp README.md dist/ngx-version-view/
+          cp CHANGELOG.md dist/ngx-version-view/ || echo "No CHANGELOG.md found, creating empty file" && touch dist/ngx-version-view/CHANGELOG.md
+          cp LICENSE dist/ngx-version-view/ || echo "No LICENSE file found"
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

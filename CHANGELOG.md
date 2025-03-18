@@ -1,9 +1,9 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All the important changes of the project will be recorded here.
 
-## 1.1.0 (2025-03-17)
+# 1.0.0 (2025-03-18)
 
 ### Features
 
-- add base structure for version view component ([131aa55](https://github.com/zenkiet/ngx-version-view/commit/131aa55699eda43c1a4965811a19a5b886acb6f3))
+- **library:** ✨ build completed library angular for ngx-version-view ([f6147fc](https://github.com/zenkiet/ngx-version-view/commit/f6147fc0169415ff11581002551b4654215cc316))

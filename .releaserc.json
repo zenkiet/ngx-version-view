@@ -44,7 +44,7 @@
     [
       "@semantic-release/changelog",
       {
-        "changelogFile": "docs/CHANGELOG.md",
+        "changelogFile": "CHANGELOG.md",
         "changelogTitle": "# Changelog\n\nAll the important changes of the project will be recorded here."
       }
     ],
@@ -53,7 +53,8 @@
       {
         "npmPublish": true,
         "pkgRoot": "dist/ngx-version-view",
-        "tarballDir": "dist"
+        "tarballDir": "dist",
+        "assets": ["package.json", "README.md", "CHANGELOG.md", "LICENSE"]
       }
     ],
     [
