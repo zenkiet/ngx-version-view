@@ -1,1 +1,1 @@
-export * from './ngx-version-view.token';
+export * from './version.token';
