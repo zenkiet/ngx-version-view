@@ -1,1 +1,1 @@
-export * from './ngx-version-view.component';
+export * from './version.component';

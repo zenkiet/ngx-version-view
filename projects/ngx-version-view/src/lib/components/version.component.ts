@@ -1,6 +1,6 @@
 import { NgComponentOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, Input, OnInit, signal } from '@angular/core';
-import { ViewService } from '../services/view.service';
+import { ViewService } from '../services';
 
 @Component({
   selector: 'ngx-view-component',
@@ -25,7 +25,7 @@ export class VersionFeatureComponent implements OnInit {
   protected componentInputs = signal<Record<string, any>>({});
 
   ngOnInit() {
-    this.component.set(this.service.getApplicableFeature(this.key));
+    this.component.set(this.service.getFeatureComponent(this.key));
     if (this.data) {
       this.componentInputs.set(this.data);
     }

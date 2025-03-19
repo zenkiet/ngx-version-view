@@ -1,1 +1,1 @@
-export * from './view.service';
+export * from './version.service';
