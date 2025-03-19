@@ -1,4 +1,4 @@
-import { Type } from '@angular/core';
+import { Provider, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DateFormat } from '../types';
 
@@ -7,7 +7,8 @@ export type VersionStrategyType = 'semantic' | 'date';
 export interface VersionConfig {
   type: VersionStrategyType;
   dateFormat?: DateFormat;
-  version: Observable<string>;
+  version?: Observable<string>;
+  provider?: Provider;
 }
 
 export interface FeatureConfig {

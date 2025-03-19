@@ -1,12 +1,31 @@
-import { Provider } from '@angular/core';
+import { InjectionToken, Provider } from '@angular/core';
 import { Observable } from 'rxjs';
 import { VersionConfig } from '../models';
 import { DateVersionStrategy, SemanticVersionStrategy } from '../strategies';
 import { VERSION_STRATEGY, VERSION_STREAM } from '../tokens';
 import { getDefaultDateFormat, isValidDateFormat } from '../types';
 
+export interface VersionProvider {
+  getVersion(): Observable<string>;
+}
+
+export const VERSION_PROVIDER = new InjectionToken<VersionProvider>('VERSION_PROVIDER');
+
 export function provideVersionView(config: VersionConfig): Provider[] {
   const providers: Provider[] = [{ provide: VERSION_STREAM, useValue: config.version }];
+
+  if (config.version) {
+    providers.push({ provide: VERSION_PROVIDER, useValue: config.provider });
+  } else if (config.provider) {
+    providers.push(config.provider);
+    providers.push({
+      provide: VERSION_STREAM,
+      useFactory: (versionProvider: VersionProvider) => versionProvider.getVersion(),
+      deps: [VERSION_PROVIDER],
+    });
+  } else {
+    throw new Error('Either version or versionProvider must be provided');
+  }
 
   if (config.type === 'date') {
     let dateFormat = getDefaultDateFormat();
@@ -35,15 +54,4 @@ export function provideVersionView(config: VersionConfig): Provider[] {
   }
 
   return providers;
-}
-
-export function provideVersionViewSimple(
-  version: Observable<string>,
-  useSemanticVersioning = true
-): Provider[] {
-  return provideVersionView({
-    type: useSemanticVersioning ? 'semantic' : 'date',
-    dateFormat: useSemanticVersioning ? undefined : getDefaultDateFormat(),
-    version,
-  });
 }

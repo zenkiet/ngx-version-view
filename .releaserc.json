@@ -76,14 +76,8 @@
           {
             "path": "dist/*.tgz",
             "label": "NPM tarball"
-          },
-          {
-            "path": "dist/ngx-version-view/**/*",
-            "label": "Distribution files"
           }
-        ],
-        "successComment": "🎉 This ${issue.pull_request ? 'PR is included' : 'issue has been resolved'} in version ${nextRelease.version}",
-        "failComment": "❌ The release failed with the following error: ${error.message}"
+        ]
       }
     ]
   ]
