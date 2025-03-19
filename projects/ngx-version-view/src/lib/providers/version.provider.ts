@@ -1,6 +1,6 @@
 import { Provider } from '@angular/core';
 import { Observable } from 'rxjs';
-import { VersionConfig, VersionStrategyType } from '../models';
+import { VersionConfig } from '../models';
 import { DateVersionStrategy, SemanticVersionStrategy } from '../strategies';
 import { VERSION_STRATEGY, VERSION_STREAM } from '../tokens';
 import { getDefaultDateFormat, isValidDateFormat } from '../types';
@@ -8,7 +8,7 @@ import { getDefaultDateFormat, isValidDateFormat } from '../types';
 export function provideVersionView(config: VersionConfig): Provider[] {
   const providers: Provider[] = [{ provide: VERSION_STREAM, useValue: config.version }];
 
-  if (config.type === VersionStrategyType.DATE) {
+  if (config.type === 'date') {
     let dateFormat = getDefaultDateFormat();
 
     if (config.dateFormat) {
@@ -42,7 +42,7 @@ export function provideVersionViewSimple(
   useSemanticVersioning = true
 ): Provider[] {
   return provideVersionView({
-    type: useSemanticVersioning ? VersionStrategyType.SEMANTIC : VersionStrategyType.DATE,
+    type: useSemanticVersioning ? 'semantic' : 'date',
     dateFormat: useSemanticVersioning ? undefined : getDefaultDateFormat(),
     version,
   });

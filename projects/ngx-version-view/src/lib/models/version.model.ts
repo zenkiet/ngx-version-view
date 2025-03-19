@@ -2,10 +2,7 @@ import { Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DateFormat } from '../types';
 
-export enum VersionStrategyType {
-  SEMANTIC = 'semantic',
-  DATE = 'date',
-}
+export type VersionStrategyType = 'semantic' | 'date';
 
 export interface VersionConfig {
   type: VersionStrategyType;

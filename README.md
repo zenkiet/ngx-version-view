@@ -15,7 +15,7 @@ A powerful Angular library that enables version-aware component rendering for se
 
 - 🚀 **Version-Aware Components** - Render different components based on your application's version
 - 🧠 **Smart Feature Selection** - Automatically selects the most appropriate component for the current version
-- ⚙️ **Multiple Version Strategies** - Support for semantic versioning (1.2.3) and date-based versioning (2023-01-15)
+- ⚙️ **Multiple Version Strategies** - Support for semantic versioning (1.1.0) and date-based versioning
 - 🎯 **Declarative API** - Simple decorator-based approach for clear and maintainable code
 - 💉 **Dependency Injection Integration** - Fully compatible with Angular's DI system
 - 🔄 **Dynamic Component Loading** - Efficiently load and render the right component at runtime
