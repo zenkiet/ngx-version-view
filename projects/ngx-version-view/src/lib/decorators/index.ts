@@ -1,1 +1,1 @@
-export * from './ngx-version-view.decorator';
+export * from './version.decorator';
