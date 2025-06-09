@@ -1,4 +1,4 @@
-import { Provider, Type } from '@angular/core';
+import { Injector, Provider, Type } from '@angular/core';
 import { Observable } from 'rxjs';
 import { DateFormat } from '../types';
 
@@ -8,6 +8,7 @@ export interface VersionConfig {
   type: VersionStrategyType;
   dateFormat?: DateFormat;
   version?: Observable<string>;
+  versionFactory?: (injector: Injector) => Observable<string>;
   provider?: Provider;
 }
 

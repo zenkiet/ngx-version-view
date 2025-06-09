@@ -1,4 +1,4 @@
-import { InjectionToken, Provider } from '@angular/core';
+import { InjectionToken, Injector, Provider, runInInjectionContext } from '@angular/core';
 import { Observable } from 'rxjs';
 import { VersionConfig } from '../models';
 import { DateVersionStrategy, SemanticVersionStrategy } from '../strategies';
@@ -16,6 +16,14 @@ export function provideVersionView(config: VersionConfig): Provider[] {
 
   if (config.version) {
     providers.push({ provide: VERSION_PROVIDER, useValue: config.provider });
+  } else if (config.versionFactory) {
+    providers.push({
+      provide: VERSION_STREAM,
+      useFactory: (injector: Injector) => {
+        return runInInjectionContext(injector, () => config.versionFactory!(injector));
+      },
+      deps: [Injector],
+    });
   } else if (config.provider) {
     providers.push(config.provider);
     providers.push({
