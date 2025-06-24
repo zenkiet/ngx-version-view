@@ -1,5 +1,13 @@
 import { NgComponentOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, Input, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Input,
+  OnInit,
+  signal,
+  Type,
+} from '@angular/core';
 import { ViewService } from '../services';
 
 @Component({
@@ -25,9 +33,24 @@ export class VersionFeatureComponent implements OnInit {
   protected componentInputs = signal<Record<string, any>>({});
 
   ngOnInit() {
-    this.component.set(this.service.getFeatureComponent(this.key));
-    if (this.data) {
-      this.componentInputs.set(this.data);
+    const comp = this.service.getFeatureComponent(this.key);
+    this.component.set(comp);
+
+    if (comp && this.data) {
+      const validInputs = this._getComponentInputs(comp);
+      const filteredData = Object.fromEntries(
+        Object.entries(this.data).filter(([key]) => validInputs.includes(key))
+      );
+      this.componentInputs.set(filteredData);
     }
+  }
+
+  private _getComponentInputs(componentType: Type<any>): string[] {
+    const def = (componentType as any).ɵcmp || (componentType as any).ɵdir;
+    if (!def?.inputs) return [];
+
+    return Object.entries(def.inputs).map(([propName, inputDef]) =>
+      typeof inputDef === 'string' ? inputDef : (inputDef as any)?.alias || propName
+    );
   }
 }
