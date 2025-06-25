@@ -1,19 +1,29 @@
 import { Route } from '@angular/router';
-import { versionRouteResolver } from '../resolvers';
-import { RouteVersionConfig } from '../types';
+import { RouteVersionConfig } from '../models';
+import { versionRouteGuard } from '../guards';
 
-export const createVersionRoute = (config: RouteVersionConfig): Route => ({
-  path: config.path,
-  loadComponent: () => import('../components').then((m) => m.VersionFeatureComponent),
-  resolve: {
-    _: versionRouteResolver,
-  },
+
+export const createVersionRoute = (config: RouteVersionConfig, allConfigs: RouteVersionConfig[]): Route => ({
+  path: config.version,
+  ...(config.component && { component: config.component }),
+  ...(config.loadChildren && { loadChildren: config.loadChildren }),
+  ...(config.loadComponent && { loadComponent: config.loadComponent }),
+  ...(config.data && { data: config.data }),
+  canActivate: [versionRouteGuard],
   data: {
-    key: config.key,
-    components: config.components,
-    ...config.data,
-  },
+    currentRouteVersion: config.version,
+    allVersions: allConfigs,
+    ...config.data
+  }
 });
 
-export const createVersionRoutes = (configs: RouteVersionConfig[]): Route[] =>
-  configs.map(createVersionRoute);
+export const createVersionRoutes = (configs: RouteVersionConfig[]): Route[] => {
+  return [
+    {
+      path: '',
+      redirectTo: configs[0].version,
+      pathMatch: 'full',
+    },
+    ...configs.map(config => createVersionRoute(config, configs)),
+  ];
+};
