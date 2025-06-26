@@ -1,389 +1,774 @@
-# NgxVersionView
+# 🚀 Ngx Version View
 
-[![npm version](https://img.shields.io/npm/v/ngx-version-view.svg)](https://www.npmjs.com/package/ngx-version-view)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Build Status](https://github.com/zenkiet/ngx-version-view/actions/workflows/release.yml/badge.svg)](https://github.com/zenkiet/ngx-version-view/actions)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+<div align="center">
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/zenkiet/ngx-version-view/main/assets/logo.png" alt="NgxVersionView Logo" width="200"/>
 </p>
 
-A powerful Angular library that enables version-aware component rendering for seamless feature management based on application versions. Perfect for progressive feature rollouts, maintaining backward compatibility, and A/B testing.
+[![npm version](https://img.shields.io/npm/v/ngx-version-view.svg)](https://www.npmjs.com/package/ngx-version-view)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://github.com/zenkiet/ngx-version-view/actions/workflows/release.yml/badge.svg)](https://github.com/zenkiet/ngx-version-view/actions)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![Angular](https://img.shields.io/badge/Angular-16+-red.svg)](https://angular.io)
+[![GitHub stars](https://img.shields.io/github/stars/zenkiet/traefik-tunnel-expose?style=flat-square&logo=github)](https://github.com/zenkiet/traefik-tunnel-expose/stargazers)
 
-## Features
+<p align="center">
+  <strong>🎯 Smart Version-Aware Angular Library for Progressive Feature Management</strong>
+</p>
 
-- 🚀 **Version-Aware Components** - Render different components based on your application's version
-- 🧠 **Smart Feature Selection** - Automatically selects the most appropriate component for the current version
-- ⚙️ **Multiple Version Strategies** - Support for semantic versioning (1.1.0) and date-based versioning
-- 🎯 **Declarative API** - Simple decorator-based approach for clear and maintainable code
-- 💉 **Dependency Injection Integration** - Fully compatible with Angular's DI system
-- 🔄 **Dynamic Component Loading** - Efficiently load and render the right component at runtime
-- 🔍 **Transparent Caching** - Optimized performance through internal caching mechanisms
-- 📦 **Standalone Component Support** - Fully compatible with Angular's standalone components
+A powerful Angular library that revolutionizes feature management through intelligent version-aware component rendering and routing. Perfect for progressive feature rollouts, maintaining backward compatibility and sophisticated release management strategies.
 
-## Installation
+[ Quick Start](#-quick-start) • [💬 Discussions](https://github.com/zenkiet/traefik-tunnel-expose/discussions)
+
+</div>
+
+---
+
+## ✨ Core Features
+
+| Feature                              | Description                                                            |
+| ------------------------------------ | ---------------------------------------------------------------------- |
+| **🧩 Version-Aware Components**      | Automatically render different components based on application version |
+| **🛤️ Smart Version Routing**         | Route management with automatic version-based redirections             |
+| **🧠 Intelligent Feature Selection** | Algorithm-based component selection for optimal user experience        |
+| **⚙️ Multiple Version Strategies**   | Support for semantic (1.2.3) and date-based (2023-10-15) versioning    |
+| **🎨 Declarative API**               | Clean decorator-based approach with TypeScript support                 |
+| **💉 DI Integration**                | Seamless Angular Dependency Injection compatibility                    |
+| **🚀 Dynamic Loading**               | Efficient lazy loading and component resolution                        |
+| **🔍 Smart Caching**                 | Performance-optimized with intelligent caching mechanisms              |
+| **📦 Standalone Support**            | Full compatibility with Angular standalone components                  |
+
+---
+
+## 📋 Table of Contents
+
+- [🚀 Installation](#-installation)
+- [🏗️ Architecture Overview](#️-architecture-overview)
+- [⚡ Quick Start](#-quick-start)
+- [🧩 Component-Based Features](#-component-based-features)
+- [🛤️ Version-Aware Routing](#️-version-aware-routing)
+- [🎯 Advanced Usage](#-advanced-usage)
+- [📚 API Reference](#-api-reference)
+- [💡 Best Practices](#-best-practices)
+- [🔧 Configuration](#-configuration)
+- [📖 Examples](#-examples)
+- [🤝 Contributing](#-contributing)
+
+---
+
+## 🚀 Installation
 
 ```bash
+# npm
 npm install ngx-version-view --save
+
+# yarn
+yarn add ngx-version-view
+
+# pnpm
+pnpm add ngx-version-view
 ```
 
-## Quick Start
+---
 
-### 1. Set up the Version Provider
+## 🏗️ Architecture Overview
 
-First, provide the version management service with your app's version:
+```mermaid
+graph TD
+    A["🚀 Application Version Stream"] --> B["Version Strategy"]
+    B --> C{"Version Type?"}
+    C -->|Semantic| D["SemanticVersionStrategy<br/>1.0.0, 2.1.5"]
+    C -->|Date| E["DateVersionStrategy<br/>2023-10-15, 01.12.2023"]
+
+    F["📦 Feature Components"] --> G["@VersionFeature Decorator"]
+    G --> H["Component Registration"]
+    H --> I["ViewService Registry"]
+
+    A --> J["VersionFeatureComponent"]
+    I --> J
+    J --> K["🎯 Render Appropriate Component"]
+
+    L["🛤️ Route Configurations"] --> M["createVersionRoutes()"]
+    M --> N["Version Routes"]
+    N --> O["versionRouteGuard"]
+    A --> O
+    O --> P["🔄 Auto Route Redirect"]
+```
+
+---
+
+## ⚡ Quick Start
+
+### 1. 🔧 Configure Version Provider
+
+Set up the version management system in your application configuration:
 
 ```typescript
 // app.config.ts
 import { ApplicationConfig } from '@angular/core';
-import { provideVersionView, VersionStrategyType } from 'ngx-version-view';
+import { provideVersionView } from 'ngx-version-view';
 import { BehaviorSubject } from 'rxjs';
 
-// Create a version stream - in a real app, this might come from an API
-const versionStream = new BehaviorSubject<string>('1.0.0');
+// Create version stream (could come from API, localStorage, etc.)
+const versionStream = new BehaviorSubject<string>('2.1.0');
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    // ... other providers
+    // 🎯 Semantic versioning configuration
     provideVersionView({
-      type: VersionStrategyType.SEMANTIC, // or VersionStrategyType.DATE
+      type: 'semantic',
       version: versionStream,
     }),
+
+    // 📅 Or date-based versioning
+    // provideVersionView({
+    //   type: 'date',
+    //   dateFormat: 'yyyy-MM-dd',
+    //   version: new BehaviorSubject('2023-10-15'),
+    // }),
   ],
 };
 ```
 
-For simpler cases, you can use the shorthand version:
+### 2. 🎭 Create Version-Aware Components
+
+Build components for different application versions:
 
 ```typescript
-provideVersionViewSimple(versionStream, true); // true = use semantic versioning
-```
-
-### 2. Create Version-Specific Components
-
-Create components for different versions and decorate them with version metadata:
-
-```typescript
-// basic-feature.component.ts
+// components/dashboard-v1.component.ts
 import { Component, Input } from '@angular/core';
 import { VersionFeature } from 'ngx-version-view';
 
 @Component({
-  selector: 'app-basic-feature',
+  selector: 'app-dashboard-v1',
   standalone: true,
-  template: `<div class="basic">Basic Feature UI - v1.0</div>`,
+  template: `
+    <div class="dashboard-v1">
+      <h2>🎯 Dashboard v1.x</h2>
+      <p>Basic dashboard for user: {{ userId }}</p>
+      <!-- Basic features only -->
+    </div>
+  `,
+  styles: [
+    `
+      .dashboard-v1 {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem;
+        border-radius: 12px;
+        color: white;
+      }
+    `,
+  ],
 })
 @VersionFeature({
   key: 'userDashboard',
   minVersion: '1.0.0',
   maxVersion: '2.0.0',
 })
-export class BasicFeatureComponent {
+export class DashboardV1Component {
   @Input() userId: string = '';
 }
 
-// advanced-feature.component.ts
-import { Component, Input } from '@angular/core';
-import { VersionFeature } from 'ngx-version-view';
-
+// components/dashboard-v2.component.ts
 @Component({
-  selector: 'app-advanced-feature',
+  selector: 'app-dashboard-v2',
   standalone: true,
-  template: `<div class="advanced">Advanced Feature UI - v2.0+</div>`,
+  template: `
+    <div class="dashboard-v2">
+      <h2>🚀 Dashboard v2.x</h2>
+      <p>Advanced dashboard for user: {{ userId }}</p>
+      <!-- Advanced features with charts, analytics, etc. -->
+    </div>
+  `,
+  styles: [
+    `
+      .dashboard-v2 {
+        background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+        padding: 2rem;
+        border-radius: 12px;
+        color: white;
+      }
+    `,
+  ],
 })
 @VersionFeature({
   key: 'userDashboard',
   minVersion: '2.0.0',
 })
-export class AdvancedFeatureComponent {
+export class DashboardV2Component {
   @Input() userId: string = '';
 }
 ```
 
-### 3. Register the Components
+### 3. 🎯 Use in Templates
 
-Register your version-specific components with the service:
+Render version-appropriate components automatically:
+
+```html
+<!-- The magic happens here - automatic version selection! -->
+<ngx-view-component
+  key="userDashboard"
+  [data]="{ userId: currentUser.id }"
+>
+  <!-- 🛡️ Fallback content when no version matches -->
+  <div class="fallback">
+    <p>⚠️ This feature is not available in your current version</p>
+    <button (click)="upgradeVersion()">🔄 Upgrade Now</button>
+  </div>
+</ngx-view-component>
+```
+
+---
+
+## 🧩 Component-Based Features
+
+### 🎨 Decorator-Based Configuration
+
+The `@VersionFeature` decorator provides a clean, declarative way to define version constraints:
 
 ```typescript
-// app.component.ts
-import { Component, OnInit } from '@angular/core';
+import { VersionFeature } from 'ngx-version-view';
+
+@VersionFeature({
+  key: 'paymentModule', // 🔑 Unique feature identifier
+  minVersion: '1.5.0', // 📊 Minimum supported version
+  maxVersion: '3.0.0', // 📈 Maximum supported version (optional)
+})
+export class PaymentModuleComponent {
+  // Component implementation
+}
+```
+
+### 🔄 Programmatic Feature Management
+
+For dynamic scenarios, use the `ViewService` directly:
+
+```typescript
+import { Component, OnInit, computed } from '@angular/core';
 import { ViewService } from 'ngx-version-view';
-import { BasicFeatureComponent } from './basic-feature.component';
-import { AdvancedFeatureComponent } from './advanced-feature.component';
 
 @Component({
-  // ...
+  selector: 'app-feature-manager',
+  template: `
+    <div class="version-info">
+      <h3>📊 Current Version: {{ currentVersion() }}</h3>
+      <p>🎯 Active Features: {{ activeFeatures().length }}</p>
+    </div>
+
+    <!-- Dynamic component rendering -->
+    <ng-container *ngComponentOutlet="featureComponent(); inputs: componentData()"></ng-container>
+  `,
 })
-export class AppComponent implements OnInit {
-  constructor(private viewService: ViewService) {}
+export class FeatureManagerComponent implements OnInit {
+  private viewService = inject(ViewService);
+
+  // 📡 Reactive current version
+  currentVersion = this.viewService.currentVersion;
+
+  // 🧮 Computed feature component
+  featureComponent = computed(() => this.viewService.getFeatureComponent('dynamicFeature'));
+
+  componentData = signal({ userId: 'user-123', theme: 'dark' });
+
+  // 📊 Get all active features (custom method)
+  activeFeatures = computed(() => {
+    // Implementation to get all active features
+    return [];
+  });
 
   ngOnInit() {
-    // Register features manually (alternative to using decorators)
+    // 📝 Register features programmatically
     this.viewService.registerFeatures([
       {
-        key: 'userDashboard',
+        key: 'dynamicFeature',
         minVersion: '1.0.0',
         maxVersion: '2.0.0',
-        component: BasicFeatureComponent,
+        component: FeatureV1Component,
       },
       {
-        key: 'userDashboard',
+        key: 'dynamicFeature',
         minVersion: '2.0.0',
-        component: AdvancedFeatureComponent,
+        component: FeatureV2Component,
       },
     ]);
   }
 }
 ```
 
-### 4. Use the Component in Templates
+---
 
-```html
-<ngx-view-component
-  key="userDashboard"
-  [data]="{ userId: currentUser.id }"
->
-  <!-- Fallback content if no matching version is found -->
-  <p>This feature is not available in your current version</p>
-</ngx-view-component>
-```
+## 🛤️ Version-Aware Routing
 
-## Advanced Usage
+### 🚀 Smart Route Management
 
-### Date-Based Versioning
-
-For applications that use dates as version numbers:
+NgxVersionView's routing system automatically redirects users to the appropriate version-specific routes:
 
 ```typescript
-import { provideVersionView, VersionStrategyType, DateFormat } from 'ngx-version-view';
-import { BehaviorSubject } from 'rxjs';
+// app.routes.ts
+import { Routes } from '@angular/router';
+import { createVersionRoutes } from 'ngx-version-view';
 
-const versionStream = new BehaviorSubject<string>('2023-10-15');
+const dashboardRoutes = createVersionRoutes([
+  {
+    version: '1.0.0',
+    loadComponent: () =>
+      import('./features/dashboard-v1/dashboard-v1.component').then((m) => m.DashboardV1Component),
+    data: {
+      title: 'Dashboard v1.0',
+      features: ['basic-charts', 'user-profile'],
+    },
+  },
+  {
+    version: '2.0.0',
+    loadComponent: () =>
+      import('./features/dashboard-v2/dashboard-v2.component').then((m) => m.DashboardV2Component),
+    data: {
+      title: 'Dashboard v2.0',
+      features: ['advanced-charts', 'analytics', 'real-time-data'],
+    },
+  },
+  {
+    version: '3.0.0',
+    loadComponent: () =>
+      import('./features/dashboard-v3/dashboard-v3.component').then((m) => m.DashboardV3Component),
+    data: {
+      title: 'Dashboard v3.0',
+      features: ['ai-insights', 'predictive-analytics', 'custom-dashboards'],
+    },
+  },
+]);
 
+export const routes: Routes = [
+  {
+    path: 'dashboard',
+    children: dashboardRoutes, // 🎯 Auto-versioned routes
+  },
+  // ... other routes
+];
+```
+
+### 🔄 Automatic Version Redirection
+
+The `versionRouteGuard` automatically redirects users to the highest compatible version:
+
+```typescript
+// Example behavior:
+// User visits: /dashboard/1.0.0
+// App version: 2.1.0
+// Result: Automatic redirect to /dashboard/2.0.0
+
+// User visits: /dashboard/3.0.0
+// App version: 1.5.0
+// Result: Automatic redirect to /dashboard/1.0.0
+```
+
+### 🛡️ Route Guard Configuration
+
+The guard works transparently with your route configurations:
+
+```typescript
+// The guard is automatically applied by createVersionRoutes()
+// But you can also use it manually:
+
+import { versionRouteGuard } from 'ngx-version-view';
+
+const customRoute: Route = {
+  path: 'custom/:version',
+  component: CustomComponent,
+  canActivate: [versionRouteGuard],
+  data: {
+    currentVersion: '2.0.0',
+    configs: [
+      /* version configs */
+    ],
+  },
+};
+```
+
+---
+
+## 🎯 Advanced Usage
+
+### 📅 Date-Based Versioning
+
+Perfect for applications using release dates as versions:
+
+```typescript
+import { provideVersionView, DateFormat } from 'ngx-version-view';
+
+// Configuration
 provideVersionView({
-  type: VersionStrategyType.DATE,
-  dateFormat: DateFormat.YYYY_MM_DD_DASH, // Or other supported formats
-  version: versionStream,
+  type: 'date',
+  dateFormat: 'yyyy-MM-dd',
+  version: new BehaviorSubject('2023-12-01'),
+});
+
+// Component with date-based versions
+@VersionFeature({
+  key: 'holidayTheme',
+  minVersion: '2023-12-01', // Available from December 1st
+  maxVersion: '2024-01-15', // Until January 15th
+})
+export class HolidayThemeComponent {}
+```
+
+#### 📋 Supported Date Formats
+
+| Format       | Example    | Description               |
+| ------------ | ---------- | ------------------------- |
+| `yyyy-MM-dd` | 2023-12-25 | ISO date format (default) |
+| `MM-dd-yyyy` | 12-25-2023 | US date format            |
+| `dd-MM-yyyy` | 25-12-2023 | European date format      |
+| `yyyy.MM.dd` | 2023.12.25 | Dot-separated format      |
+| `MM.dd.yyyy` | 12.25.2023 | US dot format             |
+| `dd.MM.yyyy` | 25.12.2023 | European dot format       |
+
+### 🔄 Dynamic Version Updates
+
+Update application version at runtime and watch components automatically update:
+
+```typescript
+@Component({
+  selector: 'app-version-controller',
+  template: `
+    <div class="version-control">
+      <h3>🎛️ Version Control Panel</h3>
+      <p>Current: {{ currentVersion() }}</p>
+
+      <div class="version-buttons">
+        <button
+          *ngFor="let v of availableVersions"
+          (click)="setVersion(v)"
+          [class.active]="currentVersion() === v"
+        >
+          🔄 Switch to {{ v }}
+        </button>
+      </div>
+    </div>
+  `,
+})
+export class VersionControllerComponent {
+  private versionStream = inject(VERSION_STREAM);
+  private viewService = inject(ViewService);
+
+  currentVersion = this.viewService.currentVersion;
+  availableVersions = ['1.0.0', '2.0.0', '2.5.0', '3.0.0'];
+
+  setVersion(version: string) {
+    this.versionStream.next(version);
+    // 🎯 All version-aware components automatically update!
+  }
+}
+```
+
+## 💡 Best Practices
+
+### 🏗️ Architecture Guidelines
+
+1. **🎯 Consistent Feature Keys**
+
+   ```typescript
+   // ✅ Good - Descriptive and consistent
+   const FEATURE_KEYS = {
+     USER_DASHBOARD: 'userDashboard',
+     PAYMENT_MODULE: 'paymentModule',
+     ANALYTICS_PANEL: 'analyticsPanel',
+   } as const;
+   ```
+
+2. **📊 Clear Version Boundaries**
+
+   ```typescript
+   // ✅ Good - Clear version ranges
+   @VersionFeature({
+     key: 'feature',
+     minVersion: '2.0.0',    // Inclusive
+     maxVersion: '3.0.0'     // Exclusive
+   })
+   ```
+
+3. **🛡️ Always Provide Fallbacks**
+   ```html
+   <!-- ✅ Good - Graceful degradation -->
+   <ngx-view-component key="newFeature">
+     <div class="fallback">
+       <p>This feature requires app version 2.0+</p>
+       <button (click)="showUpgradePrompt()">Upgrade</button>
+     </div>
+   </ngx-view-component>
+   ```
+
+### 🚀 Performance Optimization
+
+1. **💾 Leverage Built-in Caching**
+
+   - Component resolution is automatically cached
+   - Version comparisons are memoized
+   - Clear cache when needed: `viewService.clearRegistry()`
+
+2. **🔄 Lazy Loading**
+
+   ```typescript
+   // Use loadComponent for better performance
+   {
+     version: '2.0.0',
+     loadComponent: () => import('./heavy-component').then(m => m.HeavyComponent)
+   }
+   ```
+
+3. **📊 Efficient Version Strategies**
+   - Semantic versioning is faster for simple comparisons
+   - Date versioning offers more flexibility but slightly slower
+
+---
+
+## 🔧 Configuration
+
+### 🌐 Environment-Based Configuration
+
+```typescript
+// environments/environment.ts
+export const environment = {
+  production: false,
+  version: '2.1.0-dev',
+  versionStrategy: 'semantic' as const,
+};
+
+// app.config.ts
+import { environment } from './environments/environment';
+
+const versionStream = new BehaviorSubject(environment.version);
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideVersionView({
+      type: environment.versionStrategy,
+      version: versionStream,
+    }),
+  ],
+};
+```
+
+### 🔄 Dynamic Version Loading
+
+```typescript
+// Load version from API
+function createVersionFactory(http: HttpClient) {
+  return (injector: Injector) => {
+    return runInInjectionContext(injector, () =>
+      http.get<{ version: string }>('/api/app-info').pipe(
+        map((response) => response.version),
+        startWith('1.0.0') // Fallback version
+      )
+    );
+  };
+}
+
+// Configuration
+provideVersionView({
+  type: 'semantic',
+  versionFactory: createVersionFactory(inject(HttpClient)),
 });
 ```
 
-### Available Date Formats
+---
 
-The library supports multiple date formats:
+## 📖 Examples
 
-```typescript
-export enum DateFormat {
-  DD_MM_YYYY_DOT = 'dd.MM.yyyy', // 15.10.2023
-  MM_DD_YYYY_DOT = 'MM.dd.yyyy', // 10.15.2023
-  YYYY_MM_DD_DOT = 'yyyy.MM.dd', // 2023.10.15
-  YYYY_MM_DD_DASH = 'yyyy-MM-dd', // 2023-10-15
-  MM_DD_YYYY_DASH = 'MM-dd-yyyy', // 10-15-2023
-  DD_MM_YYYY_DASH = 'dd-MM-yyyy', // 15-10-2023
-}
-```
-
-### Programmatic Feature Selection
-
-You can also get components programmatically:
+### 🎨 Progressive UI Enhancement
 
 ```typescript
-import { Component, OnInit } from '@angular/core';
-import { ViewService } from 'ngx-version-view';
-
-@Component({
-  selector: 'app-dynamic-wrapper',
-  template: `
-    <ng-container *ngComponentOutlet="featureComponent; inputs: inputData"></ng-container>
-  `,
-})
-export class DynamicWrapperComponent implements OnInit {
-  featureComponent: any;
-  inputData = { userId: 'user-123' };
-
-  constructor(private viewService: ViewService) {}
-
-  ngOnInit() {
-    this.featureComponent = this.viewService.getFeatureComponent('userDashboard');
-  }
-}
-```
-
-### Current Version Access
-
-Access the current application version anywhere in your app:
-
-```typescript
-import { Component } from '@angular/core';
-import { ViewService } from 'ngx-version-view';
-
-@Component({
-  selector: 'app-version-display',
-  template: `<div>Running on version: {{ currentVersion() }}</div>`,
-})
-export class VersionDisplayComponent {
-  currentVersion = this.viewService.currentVersion;
-
-  constructor(private viewService: ViewService) {}
-}
-```
-
-### Dynamic Version Updates
-
-You can dynamically update the application version:
-
-```typescript
-import { Component } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-
-@Component({
-  // ...
-})
-export class AdminComponent {
-  constructor(@Inject(VERSION_STREAM) private versionStream: BehaviorSubject<string>) {}
-
-  updateAppVersion(newVersion: string) {
-    this.versionStream.next(newVersion);
-    // All version-aware components will automatically update
-  }
-}
-```
-
-## API Reference
-
-### Core Components
-
-| Component                 | Description                                                            |
-| ------------------------- | ---------------------------------------------------------------------- |
-| `VersionFeatureComponent` | The component that renders version-appropriate UI based on feature key |
-
-### Services
-
-| Service       | Description                                                          |
-| ------------- | -------------------------------------------------------------------- |
-| `ViewService` | Core service for registering and retrieving version-based components |
-
-### Decorators
-
-| Decorator           | Description                             |
-| ------------------- | --------------------------------------- |
-| `@VersionFeature()` | Marks a component with version metadata |
-
-### Configuration
-
-| Function                     | Description                              |
-| ---------------------------- | ---------------------------------------- |
-| `provideVersionView()`       | Configures the library with full options |
-| `provideVersionViewSimple()` | Simplified configuration function        |
-
-### Models and Interfaces
-
-| Interface               | Description                                                     |
-| ----------------------- | --------------------------------------------------------------- |
-| `VersionConfig`         | Configuration options for version strategies                    |
-| `FeatureConfig`         | Configuration for a version-specific feature                    |
-| `VersionFeatureOptions` | Options for the `@VersionFeature` decorator                     |
-| `VersionStrategy`       | Interface for implementing custom version comparison strategies |
-
-### Version Strategies
-
-| Strategy                  | Description                                             |
-| ------------------------- | ------------------------------------------------------- |
-| `SemanticVersionStrategy` | Handles semantic versioning (e.g., 1.2.3)               |
-| `DateVersionStrategy`     | Handles date-based versioning with configurable formats |
-
-## Examples
-
-### Progressive Feature Rollout
-
-```typescript
+// Basic UI for older versions
 @VersionFeature({
-  key: 'paymentMethod',
-  minVersion: '1.0.0',
-  maxVersion: '1.5.0',
-})
-export class BasicPaymentComponent {}
-
-@VersionFeature({
-  key: 'paymentMethod',
-  minVersion: '1.5.0',
+  key: 'userInterface',
   maxVersion: '2.0.0',
 })
-export class EnhancedPaymentComponent {}
+export class BasicUIComponent {
+  // Simple, lightweight interface
+}
 
+// Enhanced UI for newer versions
 @VersionFeature({
-  key: 'paymentMethod',
-  minVersion: '2.0.0',
-})
-export class AdvancedPaymentComponent {}
-```
-
-### Feature Flags
-
-```typescript
-// Enable a feature only in specific versions
-@VersionFeature({
-  key: 'experimentalFeature',
-  minVersion: '1.5.0',
-  maxVersion: '1.6.0', // Only available in this version range as a test
-})
-export class ExperimentalFeatureComponent {}
-```
-
-### A/B Testing
-
-```typescript
-// Variant A (for 50% of version 2.x users)
-@VersionFeature({
-  key: 'checkoutFlow',
+  key: 'userInterface',
   minVersion: '2.0.0',
   maxVersion: '3.0.0',
 })
-export class CheckoutVariantAComponent {}
+export class EnhancedUIComponent {
+  // Rich interactions, animations
+}
 
-// Variant B (for 50% of version 2.x users)
+// Modern UI for latest versions
 @VersionFeature({
-  key: 'checkoutFlow',
-  minVersion: '2.0.0',
-  maxVersion: '3.0.0',
+  key: 'userInterface',
+  minVersion: '3.0.0',
 })
-export class CheckoutVariantBComponent {}
-
-// In your service that manages which variant to show
-constructor(private viewService: ViewService) {
-  const variant = Math.random() > 0.5 ? CheckoutVariantAComponent : CheckoutVariantBComponent;
-
-  this.viewService.registerFeature({
-    key: 'checkoutFlow',
-    minVersion: '2.0.0',
-    maxVersion: '3.0.0',
-    component: variant
-  });
+export class ModernUIComponent {
+  // Cutting-edge features, advanced animations
 }
 ```
 
-## Best Practices
+### 🔒 Feature Gating
 
-1. **Organize by Feature Keys**: Use consistent feature keys across your application
-2. **Version Boundaries**: Define clear min/max version boundaries
-3. **Fallback Content**: Always provide fallback content in the `ngx-view-component`
-4. **Testing**: Test each version-specific component independently
-5. **Documentation**: Document version compatibility for each feature
+```typescript
+// Premium features only in paid versions
+@VersionFeature({
+  key: 'premiumFeatures',
+  minVersion: '2.0.0-premium',
+})
+export class PremiumFeaturesComponent {}
 
-## Contributing
+// Beta features for testing
+@VersionFeature({
+  key: 'experimentalAI',
+  minVersion: '3.0.0-beta.1',
+  maxVersion: '3.0.0-rc.1',
+})
+export class ExperimentalAIComponent {}
+```
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+### 🌍 Multi-tenant Applications
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+```typescript
+// Different features per tenant version
+@VersionFeature({
+  key: 'tenantDashboard',
+  minVersion: 'enterprise-2.0',
+})
+export class EnterpriseDashboardComponent {}
 
-## License
+@VersionFeature({
+  key: 'tenantDashboard',
+  minVersion: 'starter-1.0',
+  maxVersion: 'enterprise-2.0',
+})
+export class StarterDashboardComponent {}
+```
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+---
 
-## About the Author
+## 🤝 Contributing
 
-**Kiet Le** - [zenkiet](https://github.com/zenkiet)
+We welcome contributions! Here's how you can help:
+
+### 🐛 Bug Reports
+
+1. 🔍 Search existing issues
+2. 📝 Create detailed bug report
+3. 🏷️ Use appropriate labels
+
+### ✨ Feature Requests
+
+1. 💡 Discuss in GitHub Discussions
+2. 📋 Create feature request issue
+3. 🚀 Submit pull request
+
+### 🛠️ Development Workflow
+
+```bash
+# 🍴 Fork and clone
+git clone https://github.com/your-username/ngx-version-view.git
+cd ngx-version-view
+
+# 🌿 Create feature branch
+git checkout -b feature/amazing-feature
+
+# 🔧 Install dependencies
+npm install
+
+# 🔧 Make changes and test
+npm run build
+
+# ✅ Commit changes
+git commit -m "✨ Add amazing feature"
+git push origin feature/amazing-feature
+
+# 🚀 Push and create PR
+gh pr create --fill
+```
+
+### 📝 Commit Convention
+
+We use [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `✨ feat:` New features
+- `🐛 fix:` Bug fixes
+- `📚 docs:` Documentation
+- `🎨 style:` Code formatting
+- `♻️ refactor:` Code restructuring
+- `⚡ perf:` Performance improvements
+- `✅ test:` Testing
+- `🔧 chore:` Maintenance
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+```
+MIT License
+
+Copyright (c) 2025 ZenKiet
+```
+
+---
+
+## 🙏 Acknowledgments
+
+This project wouldn't be possible without these amazing technologies:
+
+<table>
+<tr>
+<td align="center" width="150px">
+<img src="https://raw.githubusercontent.com/angular/angular/refs/heads/main/adev/src/assets/images/press-kit/angular_icon_gradient.gif" width="60" height="60" alt="Angular">
+<br><strong>Angular</strong>
+<br><em>Best Framework</em>
+</td>
+<td align="center" width="150px">
+<img src="https://raw.githubusercontent.com/github/explore/refs/heads/main/topics/typescript/typescript.png" width="48" height="48" alt="Cloudflare">
+<br><strong>Typescript</strong>
+<br><em>JS Compiler</em>
+</td>
+<td align="center" width="150px">
+<img src="https://raw.githubusercontent.com/ReactiveX/rxjs/refs/heads/master/apps/rxjs.dev/src/assets/images/logos/Rx_Logo_S.png" width="48" height="48" alt="Alpine">
+<br><strong>RxJS</strong>
+<br><em>Reactive Library</em>
+</td>
+<td align="center" width="150px">
+<img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" width="48" height="48" alt="Docker">
+<br><strong>ChatGPT</strong>
+<br><em>Research</em>
+</td>
+</tr>
+</table>
+
+---
+
+## 📞 Support
+
+<div align="center">
+
+### 🤝 Get Help & Connect
+
+[![Email](https://img.shields.io/badge/Email-zenkiet0906%40gmail.com-red?style=for-the-badge&logo=gmail&logoColor=white)](mailto:zenkiet0906@gmail.com)
+[![GitHub Issues](https://img.shields.io/badge/Issues-GitHub-green?style=for-the-badge&logo=github&logoColor=white)](https://github.com/zenkiet/ngx-version-view/issues)
+[![Discussions](https://img.shields.io/badge/Discussions-GitHub-blue?style=for-the-badge&logo=github&logoColor=white)](https://github.com/zenkiet/ngx-version-view/discussions)
+
+### 📊 Project Stats
+
+![GitHub contributors](https://img.shields.io/github/contributors/zenkiet/ngx-version-view?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/zenkiet/ngx-version-view?style=flat-square)
+![GitHub repo size](https://img.shields.io/github/repo-size/zenkiet/ngx-version-view?style=flat-square)
+
+</div>
+
+---
+
+<div align="center">
+
+**⭐ If this project helped you, please consider giving it a star! ⭐**
+
+_Made with ❤️ by [ZenKiet](https://github.com/zenkiet)_
+
+</div>
